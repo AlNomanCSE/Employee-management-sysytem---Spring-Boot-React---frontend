@@ -1,25 +1,22 @@
+import { useEffect, useState } from "react";
+import { listOfEmployees } from "../services/EmployeeService";
+
 type PersonData = {
   id: number;
-  firtName: string;
+  firstName: string;
   lastName: string;
-  mail: string;
+  email: string;
 };
 
 const EmployeeList = () => {
-  const dummyData: Array<PersonData> = [
-    {
-      id: 1,
-      firtName: "Abdullah",
-      lastName: "Al Noman",
-      mail: "abdullahalnomna@gmail.com",
-    },
-    {
-      id: 2,
-      firtName: "Nahid",
-      lastName: "Islam",
-      mail: "nadidislam@gmail.com",
-    },
-  ];
+  const [employees, setEmployees] = useState(Array<PersonData>);
+  useEffect(() => {
+    listOfEmployees()
+      .then((response) => {
+        setEmployees(response.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
   return (
     <div className="w-full p-6 rounded-xl">
       <div className="w-full bg-white rounded-lg overflow-hidden">
@@ -35,15 +32,15 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {dummyData.map((data, index) => (
+            {employees.map((data, index) => (
               <tr
                 key={data.id}
                 className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
               >
                 <td className="px-4 py-3 font-medium text-center">{data.id}</td>
-                <td className="px-4 py-3 text-center">{data.firtName}</td>
+                <td className="px-4 py-3 text-center">{data.firstName}</td>
                 <td className="px-4 py-3 text-center">{data.lastName}</td>
-                <td className="px-4 py-3 text-center">{data.mail}</td>
+                <td className="px-4 py-3 text-center">{data.email}</td>
               </tr>
             ))}
           </tbody>
