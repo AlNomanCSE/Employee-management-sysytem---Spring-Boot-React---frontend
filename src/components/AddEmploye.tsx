@@ -1,20 +1,22 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { addEmployee } from "../services/EmployeeService";
+import { useNavigate } from "react-router-dom";
 
 export default function AddEmployee() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
+  const navigator = useNavigate();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Here you would typically send the data to your backend or state management system
     console.log("Employee data:", { firstName, lastName, email });
-    // Reset form fields after submission
-    setFirstName("");
-    setLastName("");
-    setEmail("");
+    addEmployee({ firstName, lastName, email }).then((response) => {
+      console.log(response);
+      navigator("/employees");
+    });
   };
 
   return (

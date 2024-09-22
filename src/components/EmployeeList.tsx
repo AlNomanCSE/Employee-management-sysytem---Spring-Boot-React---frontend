@@ -18,7 +18,7 @@ const EmployeeList = () => {
       .catch((error) => console.error(error));
   }, []);
   return (
-    <div className="w-full p-6 rounded-xl">
+    <div className="max-w-[1000px] p-6 rounded-xl">
       <div className="w-full bg-white rounded-lg overflow-hidden">
         <table className="w-full border-collapse">
           <thead className="bg-[#1dc5db] text-white">
