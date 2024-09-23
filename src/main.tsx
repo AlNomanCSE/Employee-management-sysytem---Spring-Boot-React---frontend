@@ -5,7 +5,7 @@ import "./index.css";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import AddEmployee from "./components/AddEmploye.tsx";
+import EmployeeComponent from "./components/EmployeeComponent.tsx";
 
 const Layout = () => {
   return (
@@ -34,7 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path: "add-employee", // Route for AddEmployee
-        element: <AddEmployee />,
+        element: <EmployeeComponent />,
+      },
+      {
+        path: "edit-employee/:id",
+        element: <EmployeeComponent />,
       },
     ],
   },
