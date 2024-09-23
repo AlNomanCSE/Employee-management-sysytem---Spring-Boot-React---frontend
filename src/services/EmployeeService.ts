@@ -14,3 +14,5 @@ export const addEmployee = (employee: PersonData) =>
 export const getEmployeeById = (id: number) => axios.get(REST_API_URL + "/" + id);
 
 export const updateEmployeeById = (id: number, employee: PersonData) => axios.put(REST_API_URL + "/" + id, employee);
+
+export const deleteEmployeeById = (id:number)=>axios.delete(REST_API_URL+"/"+id);
