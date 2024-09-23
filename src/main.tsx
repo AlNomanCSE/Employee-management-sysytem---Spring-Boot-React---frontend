@@ -6,6 +6,8 @@ import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import EmployeeComponent from "./components/EmployeeComponent.tsx";
+import DisplayDepartmentComponemt from "./components/DisplayDepartmentComponemt.tsx";
+import AddDepartment from "./components/DepartmentComponent.tsx";
 
 const Layout = () => {
   return (
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
         path: "edit-employee/:id",
         element: <EmployeeComponent />,
       },
+      {
+        path: "departments",
+        element: <DisplayDepartmentComponemt/>,
+      }
+      ,{
+      path:"add-department",
+        element:<AddDepartment/>
+      }
     ],
   },
 ]);
