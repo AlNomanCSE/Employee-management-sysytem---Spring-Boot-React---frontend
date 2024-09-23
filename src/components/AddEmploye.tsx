@@ -3,9 +3,7 @@
 // import { useNavigate } from "react-router-dom";
 
 // interface ErrorType {
-//   firstName?: string;
-//   lastName?: string;
-//   email?: string;
+//   [key: string]: string;
 // }
 
 // export default function AddEmployee() {
@@ -13,43 +11,22 @@
 //   const [lastName, setLastName] = useState("");
 //   const [email, setEmail] = useState("");
 //   const [errors, setErrors] = useState<ErrorType>({});
-//   const navigator = useNavigate();
+//   const navigate = useNavigate();
 
-//   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+//   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 //     e.preventDefault();
 //     const formData = { firstName, lastName, email };
-//     const errors = validateForm(formData);
-//     if (Object.keys(errors).length > 0) {
-//       setErrors(errors);
-//     } else {
-//       // form is valid, submit the data
-//       addEmployee(formData).then((response) => {
-//         console.log(response);
-//         navigator("/employees");
-//       });
+//     try {
+//       const response = await addEmployee(formData);
+//       console.log(response);
+//       navigate("/employees");
+//     } catch (error: any) {
+//       if (error.response && error.response.data) {
+//         setErrors(error.response.data);
+//       } else {
+//         setErrors({ general: "An error occurred. Please try again." });
+//       }
 //     }
-//   };
-
-//   const validateForm = (formData: {
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//   }): ErrorType => {
-//     const errors: ErrorType = {};
-//     if (!formData.firstName) {
-//       errors.firstName = "First name is required";
-//     }
-//     if (!formData.lastName) {
-//       errors.lastName = "Last name is required";
-//     }
-//     if (!formData.email) {
-//       errors.email = "Email is required";
-//     } else if (
-//       !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)
-//     ) {
-//       errors.email = "Invalid email address";
-//     }
-//     return errors;
 //   };
 
 //   return (
@@ -61,6 +38,9 @@
 //         <p className="mb-4 text-gray-600">
 //           Enter the details of the new employee below.
 //         </p>
+//         {errors.general && (
+//           <p className="text-red-500 text-sm mb-4">{errors.general}</p>
+//         )}
 //         <form onSubmit={handleSubmit} className="space-y-4">
 //           <div>
 //             <label
@@ -74,7 +54,6 @@
 //               type="text"
 //               value={firstName}
 //               onChange={(e) => setFirstName(e.target.value)}
-//               required
 //               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //             />
 //             {errors.firstName && (
@@ -93,7 +72,6 @@
 //               type="text"
 //               value={lastName}
 //               onChange={(e) => setLastName(e.target.value)}
-//               required
 //               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //             />
 //             {errors.lastName && (
@@ -112,7 +90,6 @@
 //               type="email"
 //               value={email}
 //               onChange={(e) => setEmail(e.target.value)}
-//               required
 //               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 //             />
 //             {errors.email && (
@@ -138,7 +115,9 @@ import { addEmployee } from "../services/EmployeeService";
 import { useNavigate } from "react-router-dom";
 
 interface ErrorType {
-  [key: string]: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
 }
 
 export default function AddEmployee() {
@@ -146,22 +125,43 @@ export default function AddEmployee() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<ErrorType>({});
-  const navigate = useNavigate();
+  const navigator = useNavigate();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = { firstName, lastName, email };
-    try {
-      const response = await addEmployee(formData);
-      console.log(response);
-      navigate("/employees");
-    } catch (error: any) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data);
-      } else {
-        setErrors({ general: "An error occurred. Please try again." });
-      }
+    const errors = validateForm(formData);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+    } else {
+      // form is valid, submit the data
+      addEmployee(formData).then((response) => {
+        console.log(response);
+        navigator("/employees");
+      });
     }
+  };
+
+  const validateForm = (formData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }): ErrorType => {
+    const errors: ErrorType = {};
+    if (!formData.firstName) {
+      errors.firstName = "First name is required";
+    }
+    if (!formData.lastName) {
+      errors.lastName = "Last name is required";
+    }
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)
+    ) {
+      errors.email = "Invalid email address";
+    }
+    return errors;
   };
 
   return (
@@ -173,9 +173,6 @@ export default function AddEmployee() {
         <p className="mb-4 text-gray-600">
           Enter the details of the new employee below.
         </p>
-        {errors.general && (
-          <p className="text-red-500 text-sm mb-4">{errors.general}</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
@@ -189,6 +186,7 @@ export default function AddEmployee() {
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.firstName && (
@@ -207,6 +205,7 @@ export default function AddEmployee() {
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.lastName && (
@@ -225,6 +224,7 @@ export default function AddEmployee() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.email && (
