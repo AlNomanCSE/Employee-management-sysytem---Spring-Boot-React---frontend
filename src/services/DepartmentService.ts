@@ -11,8 +11,6 @@ type DepartmentData = {
 export const addDepartment = (department: DepartmentData) =>
     axios.post(REST_API_URL, department);
 
-// export const getEmployeeById = (id: number) => axios.get(REST_API_URL + "/" + id);
-//
-// export const updateEmployeeById = (id: number, employee: PersonData) => axios.put(REST_API_URL + "/" + id, employee);
-//
-// export const del
+export const deleteDepartmentById = (id:number)=>axios.delete(REST_API_URL+"/"+id);
+export const updateDepartmentById = (id: number, department: DepartmentData) => axios.put(REST_API_URL + "/" + id, department);
+export const getDepartmentById = (id: number) => axios.get(REST_API_URL + "/" + id);

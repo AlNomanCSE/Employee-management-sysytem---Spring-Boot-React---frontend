@@ -1,6 +1,6 @@
-import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { addDepartment } from "../services/DepartmentService";
+import {useState, FormEvent, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {addDepartment, getDepartmentById, updateDepartmentById} from "../services/DepartmentService";
 
 type Errors = {
     departmentName?: string;
@@ -12,33 +12,57 @@ export default function AddDepartment() {
     const [departmentDescription, setDepartmentDescription] = useState("");
     const [errors, setErrors] = useState<Errors>({});
     const navigate = useNavigate();
-
+    const {id} = useParams();
     const saveAndUpdateDepartment = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setErrors({});  // Clear any previous errors
-        const formData = { departmentName, departmentDescription };
+        const formData = {departmentName, departmentDescription};
 
-        addDepartment(formData)
-            .then((response) => {
-                console.log(response);
-                navigate("/departments");
-            })
-            .catch(error => {
-                console.log(error);
-                if (error.response && error.response.status === 400) {
-                    // Handle the specific errors returned by your Java backend
-                    setErrors(error.response.data);
-                } else {
-                    // Handle unexpected errors
-                    setErrors({ general: "An unexpected error occurred. Please try again." });
-                }
-            });
+        if (id) {
+            updateDepartmentById(Number(id), formData)
+                .then(() => navigate("/departments"))
+                .catch(error => console.log(error));
+        } else {
+            addDepartment(formData)
+                .then(() => {
+                    navigate("/departments");
+                })
+                .catch(error => {
+                    console.log(error);
+                    if (error.response && error.response.status === 400) {
+                        // Handle the specific errors returned by your Java backend
+                        setErrors(error.response.data);
+                    } else {
+                        // Handle unexpected errors
+                        setErrors({general: "An unexpected error occurred. Please try again."});
+                    }
+                });
+        }
     };
 
+    function pageTitle() {
+        if (id) {
+            return <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                Update Department
+            </h2>
+        } else {
+            return <h2 className="text-2xl font-bold mb-4 text-gray-800">
+                Add New Departement
+            </h2>
+        }
+    }
+
+    useEffect(() => {
+        if (id) getDepartmentById(Number(id)).then((response) => {
+            setDepartmentName(response.data.departmentName);
+            setDepartmentDescription(response.data.departmentDescription);
+
+        }).catch(error => console.log(error))
+    }, [id]);
     return (
         <div className="mt-10">
             <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 className="text-2xl font-bold mb-4">Add Department</h2>
+                {pageTitle()}
 
                 {errors.general && (
                     <p className="text-red-500 text-sm mb-4">{errors.general}</p>

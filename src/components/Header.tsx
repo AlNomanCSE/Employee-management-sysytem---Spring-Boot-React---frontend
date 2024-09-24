@@ -12,8 +12,8 @@ const Header = () => {
                         <NavLink
                             to="/employees"
                             className={({ isActive }) =>
-                                `text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out ${
-                                    isActive ? 'text-pink-600' : ''
+                                `text-gray-600 hover:text-gray-900 transition duration-100 ease-in-out ${
+                                    isActive ? 'text-pink-600 font-bold' : ''
                                 }`
                             }
                         >
@@ -24,8 +24,8 @@ const Header = () => {
                         <NavLink
                             to="/departments"
                             className={({ isActive }) =>
-                                `text-gray-600 hover:text-gray-900 transition duration-300 ease-in-out ${
-                                    isActive ? 'text-pink-600' : ''
+                                `text-gray-600 hover:text-gray-900 transition duration-100 ease-in-out ${
+                                    isActive ? 'text-pink-600 font-bold' : ''
                                 }`
                             }
                         >
