@@ -38,7 +38,7 @@ const DepartmentList: React.FC = () => {
                 <table className="w-full border-collapse">
                     <thead className="bg-[#1dc5db] text-white">
                     <tr>
-                        <th className="px-4 py-3 text-center font-semibold">#Id</th>
+                        <th className="px-4 py-3 text-center font-semibold">Department ID</th>
                         <th className="px-4 py-3 text-center font-semibold">Department Name</th>
                         <th className="px-4 py-3 text-center font-semibold">Description</th>
                         <th className="px-4 py-3 text-center font-semibold">Actions</th>
